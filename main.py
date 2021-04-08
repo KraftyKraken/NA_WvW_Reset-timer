@@ -1,15 +1,14 @@
-# prime of reset cntd
+# 2nd draft of reset countdown timer.
 
 # grab yer imports
 import dateutil.relativedelta as rel
 import datetime
 import time
-from datetime import date
 from tkinter import *
 
 # creating window and name it.
 root = Tk()
-root.geometry("200x120")
+root.geometry("180x120")
 root.title("GW2 - CD")
 
 # def time vars
@@ -31,17 +30,16 @@ secondEntry.place(x=120, y=20)
 
 
 def countdown():
-    # find today and today in UTC
-    today = date.today()
-    today_UTC = datetime.datetime.utcnow()
+    # find today and today in UTC, set up temp
+    temp = 0
+    today_utc = datetime.datetime.utcnow()
+
+    # Find when next friday (for US), i.e., reset is.
+    reset_utc = rel.relativedelta(hour=2, minute=0, second=0, microsecond=0, days=1, weekday=rel.SA)
+    reset = today_utc + reset_utc
     
-    # Find when next friday, i.e., reset is.
-    fri = rel.relativedelta(days=1, weekday=rel.FR)
-    friday = today + fri
-    
-    # convert to utc and give in seconds. This should ignore DT and ST now.
-    friday_utc = rel.relativedelta(hours=26) + friday
-    time_until = int((friday_utc-today_UTC).total_seconds())
+    # give in seconds to work with below. This should ignore DT and ST now.
+    time_until = int((reset-today_utc).total_seconds())
 
     try:
         temp = time_until
@@ -50,18 +48,18 @@ def countdown():
     while temp > -1:
 
         # minutes=temp/60, seconds = temp%60)
-        mins, secs = divmod(temp, 60)
+        minutes, seconds = divmod(temp, 60)
 
         # hours. Pop up hours only if we've got a full hour.
         # hours = temp/60, minutes = temp%60)
         hours = 0
-        if mins > 60:
-            hours, mins = divmod(mins, 60)
+        if minutes > 60:
+            hours, minutes = divmod(minutes, 60)
 
         # format to 2 decimal places every time for niceness
-        hour.set("{0:2d}".format(hours))
-        minute.set("{0:2d}".format(mins))
-        second.set("{0:2d}".format(secs))
+        hour.set("{0:3d}".format(hours))
+        minute.set("{0:2d}".format(minutes))
+        second.set("{0:2d}".format(seconds))
 
         # Try to update the counter. Vague because if user closes, it's an exception, but that's ok.
         try:
@@ -72,7 +70,7 @@ def countdown():
             return 0
 
 
-btn = Button(root, text='How long until reset?', bd='5', command=countdown)
-btn.place(x=30, y=70)
+btn = Button(root, text='How Long Until Reset? ', bd='5', command=countdown)
+btn.place(x=20, y=60)
 
 root.mainloop()
