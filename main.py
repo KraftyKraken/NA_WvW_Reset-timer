@@ -1,4 +1,4 @@
-# 2nd draft of reset countdown timer.
+# 3rd draft of reset countdown timer.
 
 # grab yer imports
 import dateutil.relativedelta as rel
@@ -30,13 +30,24 @@ secondEntry.place(x=120, y=20)
 
 
 def countdown():
-    # find today and today in UTC, set up temp
+    # set temp, find UTC of today.
     temp = 0
     today_utc = datetime.datetime.utcnow()
 
-    # Find when next friday (for US), i.e., reset is.
-    reset_utc = rel.relativedelta(hour=2, minute=0, second=0, microsecond=0, days=1, weekday=rel.SA)
-    reset = today_utc + reset_utc
+    # if today is not sat (sat 2am UTC when reset is)
+    # find next saturday and say how long it is
+    if today_utc.weekday() != 5:
+        reset_utc = rel.relativedelta(hour=2, minute=0, second=0, microsecond=0, days=1, weekday=rel.SA)
+        reset = today_utc + reset_utc
+    # today is saturday
+    else:
+        # we're after 2am in the day just go about it normally
+        if datetime.datetime.utcnow().time() >= datetime.time(2, 0, 0, 0):
+            reset_utc = rel.relativedelta(hour=2, minute=0, second=0, microsecond=0, days=1, weekday=rel.SA)
+            reset = today_utc + reset_utc
+        # otherwise don't go to any other day, just give the 2hr countdown
+        else:
+            reset = today_utc + rel.relativedelta(hour=2, minute=0, second=0, microsecond=0)
     
     # give in seconds to work with below. This should ignore DT and ST now.
     time_until = int((reset-today_utc).total_seconds())
