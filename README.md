@@ -14,4 +14,5 @@ To "install", grab the zip file and take the .exe out and use it from where ever
 Please let your local kraken know of any bugs/incompatabilities.
 
 # How to Build <h8> 
-Required to build from .py file are dateutil, python 3.8+, and pyinstaller
+Required to build from .py file are dateutil, python 3.8+, and pyinstaller.
+Now requires an icon and file_version_info. Use what you want and simply bundle with pyinstaller.
