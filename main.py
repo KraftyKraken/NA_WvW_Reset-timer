@@ -1,4 +1,4 @@
-# 5th draft of reset countdown timer.
+# 6th draft of reset countdown timer.
 # By: KraftyKraken - octonink@gmail.com
 # Created: 4/7/2021
 
@@ -7,10 +7,16 @@ import datetime
 from tkinter import *
 from tkinter import messagebox
 
+
 # creating window and name it.
 root = Tk()
 root.geometry("200x140")
-root.title("RC")
+root.title("Reset Countdown")
+try:
+    root.iconbitmap(default='icon.ico')
+except:
+    messagebox.showerror("Icon Error", "Unable to find icon resource. Put me back with my friends!")
+    exit(1)
 
 # def time vars + other
 hour = StringVar()
@@ -138,9 +144,17 @@ btn = Button(root, text="NA? ", bd='5', command=na_time)
 btn.place(x=20, y=60)
 btn = Button(root, text="Custom Today", bd='5', command=my_raid)
 btn.place(x=20, y=95)
-btn = Button(root, text="Reset", bd='5', command=stop_program)
-btn.place(x=135, y=60)
-btn = Button(root, text="Close", bd='5', command=close_program)
-btn.place(x=135, y=95)
 
+# menu bar
+menu_bar = Menu(root)
+file_menu = Menu(menu_bar, tearoff=0)
+file_menu.add_command(label="Reset", command=stop_program)
+file_menu.add_separator()
+file_menu.add_command(label="Close", command=close_program)
+menu_bar.add_cascade(label="File", menu=file_menu)
+
+help_menu = Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label="Help", menu=help_menu)
+
+root.config(menu=menu_bar)
 root.mainloop()
