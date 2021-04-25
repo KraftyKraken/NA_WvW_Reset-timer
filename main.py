@@ -1,6 +1,7 @@
 # 6th draft of reset countdown timer.
 # By: KraftyKraken - octonink@gmail.com
 # Created: 4/7/2021
+import _tkinter
 
 import dateutil.relativedelta as rel
 import datetime
@@ -14,7 +15,7 @@ root.geometry("200x140")
 root.title("Reset Countdown")
 try:
     root.iconbitmap(default='icon.ico')
-except:
+except _tkinter.TclError:
     messagebox.showerror("Icon Error", "Unable to find icon resource. Put me back with my friends!")
     exit(1)
 
@@ -73,16 +74,20 @@ def my_raid():
         int(hour.get())
         int(minute.get())
         int(second.get())
-    except:
+    except ValueError:
         messagebox.showerror("Bad Input", "Please input numbers into the boxes")
         return
     now = datetime.datetime.today()
-    target_time = rel.relativedelta(hour=int(hour.get()), minute=int(minute.get()),
-                                    second=int(minute.get()), microsecond=0)
-    my_time = now + target_time
-    if int((my_time-now).total_seconds()) <= 0:
-        messagebox.showerror("Bad Input", "Please use military time\nFor PM, simply add 12 hour.")
-    countdown(int((my_time-now).total_seconds()))
+    try:
+        target_time = rel.relativedelta(hour=int(hour.get()), minute=int(minute.get()),
+                                        second=int(minute.get()), microsecond=0)
+        my_time = now + target_time
+        if int((my_time-now).total_seconds()) <= 0:
+            messagebox.showerror("Bad Input", "Please use military time\nFor PM, simply add 12 hour.")
+        countdown(int((my_time-now).total_seconds()))
+    except ValueError:
+        messagebox.showerror("Bad Input", "Please use:\nBetween 0 and 23 on hours\nBetween 0 and 60 on "
+                                          "minutes and seconds.")
 
 
 def countdown(work_time):
@@ -90,7 +95,7 @@ def countdown(work_time):
     temp = 0
     try:
         temp = work_time
-    except:
+    except ValueError:
         messagebox.showerror("Value Error", "Incorrect values! Date Calculation malfunction")
     while temp > -1:
 
@@ -119,8 +124,8 @@ def countdown(work_time):
                 minute.set("0")
                 second.set("0")
                 root.update()
-        except:
-            return 0
+        except _tkinter.TclError:
+            return
 
 
 def close_program():
@@ -140,9 +145,9 @@ def stop_program():
     running = False
 
 
-btn = Button(root, text="NA? ", bd='5', command=na_time)
+btn = Button(root, text=" NA ", bd='5', command=na_time)
 btn.place(x=20, y=60)
-btn = Button(root, text="Custom Today", bd='5', command=my_raid)
+btn = Button(root, text=" Custom Today ", bd='5', command=my_raid)
 btn.place(x=20, y=95)
 
 # menu bar
@@ -153,6 +158,7 @@ file_menu.add_separator()
 file_menu.add_command(label="Close", command=close_program)
 menu_bar.add_cascade(label="File", menu=file_menu)
 
+# help menu
 help_menu = Menu(menu_bar, tearoff=0)
 menu_bar.add_cascade(label="Help", menu=help_menu)
 
