@@ -19,7 +19,8 @@ Known:\
 -Windows think it's evil because of a lack of cert. It's not, you can look here and see the evilest thing are those global variables.\
 -Can't find icon. Not really a bug. But please place it back with it's "icon.ico" friend.\
 -Slow visual updates. This isn't something I'm in control of; that's tkinter.\
--Timing is not 100% exact. Because of time to draw the item and check, the miliseconds aren't 100% the same. It's still within the same second.
+-Timing is not 100% exact. Because of time to draw the item and check, the miliseconds aren't 100% the same. It's still within the same second.\
+-Malwarebytes thinks it's malware that the AI part of malwarebytes uses to flag it leading to "Malware.AI.#####". This is a false positive that comes and goes because of how pyinstaller bundles dependencies. [Link](https://forums.malwarebytes.com/topic/272383-malwarebytes-is-flagging-python-exes-created-using-pyinstaller/)
 
 
 # How to Build <h8> 
